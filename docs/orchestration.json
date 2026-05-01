@@ -1,0 +1,260 @@
+{
+  "version": "0.1",
+  "source": "assistant-authored from PRD.md by Neo; designed as LLM-quality orchestration with explicit concurrency waves",
+  "workspace": "default",
+  "repository": "voicepath",
+  "generated_by": "Neo",
+  "generated_at": "2026-05-01T06:59:13.594502+00:00",
+  "product_north_star": "Build a low-latency voice routing SDK that makes agent speech fast, stable, observable, and graceful under provider failure without ever randomly switching voice mid-sentence.",
+  "dispatch_now": [
+    "voicepath-define-routing-contract"
+  ],
+  "blocked_tasks": [
+    "voicepath-final-product-review"
+  ],
+  "refinement_notes": [
+    "The policy engine is the product. Provider adapters are replaceable; continuity rules are the durable wedge.",
+    "Model utterances as planned segments before playback so routing, fallback, and cancellation are deterministic.",
+    "Demo must prove the magic: fast first audio, visible fallback reason, no mid-sentence voice switch.",
+    "Privacy/default-safety matters: no hidden cloud calls and local/device mode must work without credentials."
+  ],
+  "waves": [
+    {
+      "index": 1,
+      "name": "Routing contract and invariants",
+      "mode": "sequential",
+      "dispatch": "now",
+      "tasks": [
+        "voicepath-define-routing-contract"
+      ]
+    },
+    {
+      "index": 2,
+      "name": "Core voice engine",
+      "mode": "concurrent",
+      "dispatch": "after_dependencies",
+      "tasks": [
+        "voicepath-build-policy-engine",
+        "voicepath-utterance-planner-playback-queue",
+        "voicepath-provider-adapters"
+      ]
+    },
+    {
+      "index": 3,
+      "name": "Observability and interruption",
+      "mode": "concurrent",
+      "dispatch": "after_dependencies",
+      "tasks": [
+        "voicepath-event-telemetry-api",
+        "voicepath-interruption-and-bargekit-hooks"
+      ]
+    },
+    {
+      "index": 4,
+      "name": "Proof demo and docs",
+      "mode": "concurrent",
+      "dispatch": "after_dependencies",
+      "tasks": [
+        "voicepath-demo-latency-fallback",
+        "voicepath-docs-privacy-recipes"
+      ]
+    },
+    {
+      "index": 5,
+      "name": "Resilience and final voice UX review",
+      "mode": "sequential",
+      "dispatch": "after_human_decision",
+      "tasks": [
+        "voicepath-resilience-test-matrix",
+        "voicepath-final-product-review"
+      ]
+    }
+  ],
+  "tasks": [
+    {
+      "id": "voicepath-define-routing-contract",
+      "title": "Define voice routing contract and utterance lifecycle",
+      "repo": "voicepath",
+      "branch": "agent/define-routing-contract",
+      "phase": "foundation",
+      "risk": "medium",
+      "depends_on": [],
+      "can_run_concurrently_with": [],
+      "dispatchable": true,
+      "blocked_by": [],
+      "objective": "Specify provider interface, utterance/segment lifecycle, latency budget fields, continuity invariants, event stream, and package layout.",
+      "acceptance_criteria": "Architecture doc and types define speak, interrupt, provider health, segment planning, fallback reasons, and observable events."
+    },
+    {
+      "id": "voicepath-build-policy-engine",
+      "title": "Build policy engine for latency, quality, fallback, and continuity",
+      "repo": "voicepath",
+      "branch": "agent/build-policy-engine",
+      "phase": "implementation",
+      "risk": "medium",
+      "depends_on": [
+        "voicepath-define-routing-contract"
+      ],
+      "can_run_concurrently_with": [
+        "voicepath-utterance-planner-playback-queue",
+        "voicepath-provider-adapters"
+      ],
+      "dispatchable": false,
+      "blocked_by": [],
+      "objective": "Implement deterministic provider selection with health checks, disabled/quota states, local fallback, quality tiers, and never-switch-mid-sentence invariants.",
+      "acceptance_criteria": "Unit tests cover provider preference, failure, timeout, quota disabled, offline fallback, and continuity guarantees."
+    },
+    {
+      "id": "voicepath-utterance-planner-playback-queue",
+      "title": "Build utterance planner and streaming playback queue",
+      "repo": "voicepath",
+      "branch": "agent/utterance-planner-playback-queue",
+      "phase": "implementation",
+      "risk": "medium",
+      "depends_on": [
+        "voicepath-define-routing-contract"
+      ],
+      "can_run_concurrently_with": [
+        "voicepath-build-policy-engine",
+        "voicepath-provider-adapters"
+      ],
+      "dispatchable": false,
+      "blocked_by": [],
+      "objective": "Segment text into safe phrases, prefetch when allowed, queue chunks, preserve voice identity through an utterance, and expose interruption hooks.",
+      "acceptance_criteria": "Tests prove chunk ordering, cancellation, sentence boundaries, prefetch limits, and no unsafe provider swaps."
+    },
+    {
+      "id": "voicepath-provider-adapters",
+      "title": "Implement provider adapters and mocks",
+      "repo": "voicepath",
+      "branch": "agent/provider-adapters",
+      "phase": "implementation",
+      "risk": "medium",
+      "depends_on": [
+        "voicepath-define-routing-contract"
+      ],
+      "can_run_concurrently_with": [
+        "voicepath-build-policy-engine",
+        "voicepath-utterance-planner-playback-queue"
+      ],
+      "dispatchable": false,
+      "blocked_by": [],
+      "objective": "Add device/browser speech, OpenAI, ElevenLabs, macOS/system where practical, plus rich mock providers for latency/failure tests.",
+      "acceptance_criteria": "Adapters are explicit opt-in, credentials are passed by caller, mock suite can simulate latency, quota exhaustion, stream failure, and partial audio."
+    },
+    {
+      "id": "voicepath-event-telemetry-api",
+      "title": "Build observable event and latency reporting API",
+      "repo": "voicepath",
+      "branch": "agent/event-telemetry-api",
+      "phase": "implementation",
+      "risk": "low",
+      "depends_on": [
+        "voicepath-build-policy-engine",
+        "voicepath-utterance-planner-playback-queue"
+      ],
+      "can_run_concurrently_with": [
+        "voicepath-interruption-and-bargekit-hooks"
+      ],
+      "dispatchable": false,
+      "blocked_by": [],
+      "objective": "Emit speaking, provider selected, fallback used, first-audio latency, chunk latency, interruption, and completion events for AgentPulse/ToolTrace/AgentGlow.",
+      "acceptance_criteria": "Consumers can subscribe; event fixtures drive snapshots; no event leaks secrets."
+    },
+    {
+      "id": "voicepath-interruption-and-bargekit-hooks",
+      "title": "Wire cancellation and BargeKit integration hooks",
+      "repo": "voicepath",
+      "branch": "agent/interruption-and-bargekit-hooks",
+      "phase": "integration",
+      "risk": "medium",
+      "depends_on": [
+        "voicepath-utterance-planner-playback-queue",
+        "voicepath-event-telemetry-api"
+      ],
+      "can_run_concurrently_with": [
+        "voicepath-event-telemetry-api"
+      ],
+      "dispatchable": false,
+      "blocked_by": [],
+      "objective": "Expose interrupt/duck/resume semantics so BargeKit can stop or lower output immediately when the user speaks.",
+      "acceptance_criteria": "Synthetic tests verify barge-in cancels queued segments, emits interruption, and does not resume stale audio."
+    },
+    {
+      "id": "voicepath-demo-latency-fallback",
+      "title": "Build latency and fallback demo",
+      "repo": "voicepath",
+      "branch": "agent/demo-latency-fallback",
+      "phase": "demo",
+      "risk": "medium",
+      "depends_on": [
+        "voicepath-provider-adapters",
+        "voicepath-event-telemetry-api"
+      ],
+      "can_run_concurrently_with": [
+        "voicepath-docs-privacy-recipes"
+      ],
+      "dispatchable": false,
+      "blocked_by": [],
+      "objective": "Create a demo/CLI showing local vs cloud, simulated degradation, fallback reasons, first-audio timing, and continuity across a multi-sentence response.",
+      "acceptance_criteria": "Demo works without cloud credentials via mocks/device; with credentials it can compare providers; screenshots make the value obvious."
+    },
+    {
+      "id": "voicepath-docs-privacy-recipes",
+      "title": "Write docs, privacy model, and routing recipes",
+      "repo": "voicepath",
+      "branch": "agent/docs-privacy-recipes",
+      "phase": "documentation",
+      "risk": "low",
+      "depends_on": [
+        "voicepath-demo-latency-fallback",
+        "voicepath-interruption-and-bargekit-hooks"
+      ],
+      "can_run_concurrently_with": [
+        "voicepath-demo-latency-fallback"
+      ],
+      "dispatchable": false,
+      "blocked_by": [],
+      "objective": "Document quickstart, provider setup, safe defaults, no hidden network calls, latency tradeoffs, fallback recipes, and integration with AgentPulse/BargeKit.",
+      "acceptance_criteria": "README and docs explain the continuity wedge and give copy-paste configs for desktop, browser, mobile-style, and offline-first setups."
+    },
+    {
+      "id": "voicepath-resilience-test-matrix",
+      "title": "Build resilience test matrix and quality gates",
+      "repo": "voicepath",
+      "branch": "agent/resilience-test-matrix",
+      "phase": "verification",
+      "risk": "medium",
+      "depends_on": [
+        "voicepath-docs-privacy-recipes"
+      ],
+      "can_run_concurrently_with": [
+        "voicepath-final-product-review"
+      ],
+      "dispatchable": false,
+      "blocked_by": [],
+      "objective": "Add tests and fixtures for provider failures, slow starts, partial streams, quota states, cancellation, local fallback, and latency reports.",
+      "acceptance_criteria": "CI runs core tests; matrix verifies all critical failure modes; final report documents what is mocked vs real-provider manual."
+    },
+    {
+      "id": "voicepath-final-product-review",
+      "title": "Final voice UX review and release readiness",
+      "repo": "voicepath",
+      "branch": "agent/final-product-review",
+      "phase": "final_validation",
+      "risk": "high",
+      "depends_on": [
+        "voicepath-resilience-test-matrix"
+      ],
+      "can_run_concurrently_with": [
+        "voicepath-resilience-test-matrix"
+      ],
+      "dispatchable": false,
+      "blocked_by": [
+        "approve high-risk scope before dispatch"
+      ],
+      "objective": "Run a full product review against the promise: starts fast, degrades gracefully, never switches voice mid-sentence, and tells the UI what happened.",
+      "acceptance_criteria": "Human/product signoff before public release because voice UX failure is very noticeable."
+    }
+  ]
+}
