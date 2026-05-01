@@ -4,3 +4,5 @@ export * from './policy.js';
 export * from './planner.js';
 export * from './providers.js';
 export * from './voicepath.js';
+export * from './telemetry.js';
+export * from './bargekit.js';
