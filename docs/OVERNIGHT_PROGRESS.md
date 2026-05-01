@@ -53,11 +53,11 @@ Validation: `npm test` passed (33 tests at the time of commit).
 
 ## Final validation
 
-Pending before merge/push:
+Completed before merge/push:
 
-- `npm test`
-- `bash scripts/validate.sh`
-- `npm run demo -- "Fallback should be visible and stable."`
+- `npm test` — passed, 33 tests.
+- `bash scripts/validate.sh` — passed; package test script passed via pnpm; optional `agent-qc` not installed and skipped.
+- `npm run demo -- "Fallback should be visible and stable."` — passed; device fallback emitted `provider_unhealthy`, first-audio latency reported, speech completed.
 
 ## Blockers / caveats
 
