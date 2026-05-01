@@ -12,9 +12,14 @@
     "README.md"
   ],
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "demo": "node demo/latency-fallback.mjs",
+    "validate": "bash scripts/validate.sh"
   },
   "keywords": [],
   "author": "StackForge User",
-  "license": "MIT"
+  "license": "MIT",
+  "bin": {
+    "voicepath": "./demo/latency-fallback.mjs"
+  }
 }
