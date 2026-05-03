@@ -77,3 +77,18 @@ If verification cannot be run, explain why and provide the exact command maintai
 ## Maintainer Review
 
 Maintainers may request narrower scope, clearer verification, additional tests, or safer defaults before merging.
+
+
+## Local development loop
+
+Before opening a PR, run:
+
+```sh
+npm run check
+npm test
+npm run build
+npm run smoke
+bash scripts/validate.sh
+```
+
+Prefer adding a fixture in `tests/fixtures/` whenever a routing bug can be reproduced without live provider credentials.

@@ -18,7 +18,7 @@ import {
   createElevenLabsProvider,
   createOpenAiVoiceProvider,
   createVoicePath
-} from 'voicepath';
+} from '@voicepath/core';
 
 const voice = createVoicePath({
   policy: {
@@ -55,6 +55,10 @@ VOICEPATH_DEMO_CLOUD=healthy npm run demo -- "Show preferred cloud."
 ```
 
 See [docs/DEMO.md](docs/DEMO.md).
+
+## Personality
+
+voicepath is the calm stage manager for agent voice: quick to start, honest when it falls back, and stubborn about not changing the actor mid-line.
 
 ## Why voicepath is different
 

@@ -56,3 +56,8 @@ Out of scope:
 ## Disclosure
 
 Coordinate disclosure with maintainers before publishing vulnerability details.
+
+
+## Voice provider secrets
+
+Do not include provider API keys in issues, fixtures, telemetry snapshots, or examples. Use mock providers for reproduction cases whenever possible. See `SAFETY.md` for the local-first operating model.
