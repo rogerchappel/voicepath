@@ -1,0 +1,5 @@
+{
+  "request": { "text": "Cloud is down. Keep speaking locally.", "voice": "calm-operator", "context": "fixture-smoke" },
+  "policy": { "prefer": ["cloud", "device"], "fallback": "device", "maxFirstAudioMs": 100, "prefetchSegments": 0 },
+  "providers": { "cloud": { "latencyMs": 5, "qualityTier": "premium", "health": { "state": "offline" } }, "device": { "adapter": "device", "voice": "local-calm" } }
+}
