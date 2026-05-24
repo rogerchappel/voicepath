@@ -4,8 +4,12 @@
   "description": "Local-first low-latency voice routing SDK for agent apps.",
   "type": "module",
   "main": "./src/index.js",
+  "types": "./src/index.d.ts",
   "exports": {
-    ".": "./src/index.js"
+    ".": {
+      "types": "./src/index.d.ts",
+      "default": "./src/index.js"
+    }
   },
   "files": [
     "src",
@@ -35,16 +39,16 @@
   ],
   "author": "Roger Chappel",
   "license": "MIT",
-  "bin": {
-    "voicepath": "./src/cli.js"
-  },
-  "homepage": "https://github.com/rogerchappel/voicepath#readme",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/rogerchappel/voicepath.git"
   },
   "bugs": {
     "url": "https://github.com/rogerchappel/voicepath/issues"
+  },
+  "homepage": "https://github.com/rogerchappel/voicepath#readme",
+  "bin": {
+    "voicepath": "./src/cli.js"
   },
   "sideEffects": false
 }

@@ -8,7 +8,7 @@ Low-latency voice routing for agent apps. voicepath picks the best eligible TTS 
 npm install @voicepath/core
 ```
 
-This repository exposes `@voicepath/core`: a local-first SDK and CLI for provider routing, latency budgets, fallback, telemetry, and voice continuity.
+This repository exposes `@voicepath/core`: a local-first SDK and CLI for provider routing, latency budgets, fallback, telemetry, voice continuity, and typed SDK consumers.
 
 ## Quickstart
 
