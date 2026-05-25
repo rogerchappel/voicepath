@@ -10,6 +10,7 @@ format and uses semantic versioning when versioned releases are published.
 ### Added
 
 - Initial project setup.
+- TypeScript declarations and package metadata for local SDK consumers.
 
 ## Release Links
 

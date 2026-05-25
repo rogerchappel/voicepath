@@ -1,47 +1,60 @@
 {
-  "name": "voicepath",
+  "name": "@voicepath/core",
   "version": "0.1.0",
-  "description": "Low-latency voice routing for agent apps — picks best TTS provider, falls back gracefully, maintains voice continuity",
+  "description": "Local-first low-latency voice routing SDK for agent apps.",
   "type": "module",
   "main": "./src/index.js",
+  "types": "./src/index.d.ts",
   "exports": {
-    ".": "./src/index.js"
+    ".": {
+      "types": "./src/index.d.ts",
+      "default": "./src/index.js"
+    }
   },
   "files": [
     "src",
-    "README.md"
+    "demo",
+    "examples",
+    "docs",
+    "README.md",
+    "SAFETY.md",
+    "LICENSE"
   ],
   "scripts": {
-    "test": "node --test",
-    "demo": "node demo/latency-fallback.mjs",
-    "validate": "bash scripts/validate.sh",
-    "smoke": "node demo/latency-fallback.mjs \"Hello\"",
-    "package:smoke": "npm pack --dry-run",
     "check": "node scripts/check.mjs",
-    "release:check": "npm run check && npm test && npm run smoke && npm run package:smoke"
+    "test": "node --test",
+    "build": "node scripts/build.mjs",
+    "smoke": "node scripts/smoke.mjs",
+    "demo": "node src/cli.js demo",
+    "validate": "bash scripts/validate.sh",
+    "package:smoke": "npm pack --dry-run",
+    "release:check": "npm run check && npm test && npm run build && npm run smoke && npm run package:smoke"
   },
   "keywords": [
     "voice",
     "tts",
     "text-to-speech",
     "latency",
+    "speech",
+    "voice-agents",
+    "agent-ui",
     "fallback",
-    "agent",
-    "routing",
-    "elevenlabs",
-    "openai",
-    "continuity"
+    "local-first"
   ],
   "author": "Roger Chappel",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rogerchappel/voicepath.git"
+    "url": "git+ssh://git@github.com/rogerchappel/voicepath.git"
   },
   "bugs": {
     "url": "https://github.com/rogerchappel/voicepath/issues"
   },
   "homepage": "https://github.com/rogerchappel/voicepath#readme",
+  "bin": {
+    "voicepath": "./src/cli.js"
+  },
+  "sideEffects": false,
   "engines": {
     "node": ">=18.0.0"
   }

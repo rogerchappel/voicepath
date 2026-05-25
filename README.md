@@ -8,7 +8,7 @@ Low-latency voice routing for agent apps. voicepath picks the best eligible TTS 
 npm install @voicepath/core
 ```
 
-This repository currently exposes the core package from `src/` for local development.
+This repository exposes `@voicepath/core`: a local-first SDK and CLI for provider routing, latency budgets, fallback, telemetry, voice continuity, and typed SDK consumers.
 
 ## Quickstart
 
@@ -18,7 +18,7 @@ import {
   createElevenLabsProvider,
   createOpenAiVoiceProvider,
   createVoicePath
-} from 'voicepath';
+} from '@voicepath/core';
 
 const voice = createVoicePath({
   policy: {
@@ -56,6 +56,10 @@ VOICEPATH_DEMO_CLOUD=healthy npm run demo -- "Show preferred cloud."
 
 See [docs/DEMO.md](docs/DEMO.md).
 
+## Personality
+
+voicepath is the calm stage manager for agent voice: quick to start, honest when it falls back, and stubborn about not changing the actor mid-line.
+
 ## Why voicepath is different
 
 - Deterministic policy engine for latency, quality, quota, health, and fallback.
@@ -66,14 +70,19 @@ See [docs/DEMO.md](docs/DEMO.md).
 
 ## Recipes and privacy
 
+- [Safety model](SAFETY.md)
 - [Privacy model](docs/PRIVACY.md)
+- [Examples](examples/)
 - [Routing recipes](docs/RECIPES.md)
 - [Routing contract](docs/ROUTING_CONTRACT.md)
 
 ## Verify
 
 ```sh
+npm run check
 npm test
+npm run build
+npm run smoke
 bash scripts/validate.sh
 ```
 
