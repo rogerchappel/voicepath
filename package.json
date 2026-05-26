@@ -26,11 +26,15 @@
     "build": "node scripts/build.mjs",
     "smoke": "node scripts/smoke.mjs",
     "demo": "node src/cli.js demo",
-    "validate": "bash scripts/validate.sh"
+    "validate": "bash scripts/validate.sh",
+    "package:smoke": "npm pack --dry-run",
+    "release:check": "npm run check && npm test && npm run build && npm run smoke && npm run package:smoke"
   },
   "keywords": [
     "voice",
     "tts",
+    "text-to-speech",
+    "latency",
     "speech",
     "voice-agents",
     "agent-ui",
@@ -50,5 +54,8 @@
   "bin": {
     "voicepath": "./src/cli.js"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18.0.0"
+  }
 }
