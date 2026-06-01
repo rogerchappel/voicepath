@@ -24,3 +24,12 @@ test('CLI main can run doctor without throwing', async () => {
   try { await main(['doctor']); } finally { console.log = original; }
   assert.equal(JSON.parse(output).ok, true);
 });
+
+test('CLI supports help and version flags', async () => {
+  const help = await execFileAsync(process.execPath, ['src/cli.js', '--help'], { cwd: new URL('..', import.meta.url).pathname });
+  assert.match(help.stdout, /Usage:/);
+  assert.match(help.stdout, /voicepath doctor/);
+
+  const version = await execFileAsync(process.execPath, ['src/cli.js', '--version'], { cwd: new URL('..', import.meta.url).pathname });
+  assert.match(version.stdout.trim(), /^\d+\.\d+\.\d+$/);
+});
