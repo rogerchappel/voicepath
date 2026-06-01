@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { readFileSync } from 'node:fs';
 import { createDeviceSpeechProvider, createElevenLabsProvider, createMockProvider, createOpenAiVoiceProvider, createSystemSpeechProvider, createVoicePath, summarizeVoicePathEvents } from './index.js';
+import packageJson from '../package.json' with { type: 'json' };
 
 function parseArgs(argv) {
   const [command = 'demo', ...rest] = argv;
@@ -86,12 +87,26 @@ async function runLatency(flags) {
   console.log(JSON.stringify({ ok: true, command: 'latency', providers: rows }, null, 2));
 }
 
+function printHelp() {
+  console.log(`voicepath ${packageJson.version}
+
+Usage:
+  voicepath doctor
+  voicepath latency [--fixture file]
+  voicepath speak [--fixture file] [--text text] [--voice id] [text...]
+  voicepath demo [--fixture file] [text...]
+
+All commands are local-first. Cloud providers require explicit credentials in the caller environment.`);
+}
+
 async function main(argv = process.argv.slice(2)) {
   const { command, flags } = parseArgs(argv);
+  if (command === '--help' || command === '-h' || flags.help || flags.h) return printHelp();
+  if (command === '--version' || command === '-v' || flags.version) return console.log(packageJson.version);
   if (command === 'doctor') return runDoctor(flags);
   if (command === 'latency') return runLatency(flags);
   if (command === 'speak' || command === 'demo') return runSpeak(flags);
-  console.error('Usage: voicepath <doctor|latency|speak|demo> [--fixture file] [--text text]');
+  printHelp();
   process.exitCode = 2;
 }
 
