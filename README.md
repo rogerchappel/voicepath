@@ -99,3 +99,15 @@ See [SECURITY.md](SECURITY.md). Do not put provider credentials into telemetry p
 ## License
 
 MIT
+
+## Development
+
+Run the same checks locally before opening a PR:
+
+- `npm run check` - node scripts/check.mjs
+- `npm run build` - node scripts/build.mjs
+- `npm test` - node --test
+- `npm run smoke` - node scripts/smoke.mjs
+- `npm run validate` - bash scripts/validate.sh
+- `npm run package:smoke` - npm pack --dry-run
+- `npm run release:check` - npm run check && npm test && npm run build && npm run smoke && npm run package:smoke
