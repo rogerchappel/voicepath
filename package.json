@@ -30,7 +30,7 @@
     "smoke": "node scripts/smoke.mjs",
     "demo": "node src/cli.js demo",
     "validate": "bash scripts/validate.sh",
-    "package:smoke": "npm pack --dry-run",
+    "package:smoke": "bash scripts/package-smoke.sh",
     "release:check": "npm run check && npm test && npm run build && npm run smoke && npm run package:smoke"
   },
   "keywords": [
